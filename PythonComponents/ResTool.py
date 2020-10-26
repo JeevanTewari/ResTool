@@ -45,13 +45,12 @@ def storage_setup():
 	reference_sequence = reference_sequence.upper()
 
 	frequencies = calculate_residue_frequency(reference_sequence, index, seq_storage)
-	frequencies = {k: v for k, v in sorted(frequencies.items(), key=lambda item: item[1],
-		reverse=True)} # sorting the dictionaries
+	frequencies = (sorted(frequencies.items(), key = 
+             lambda kv:(kv[1], kv[0]), reverse = True)) # sorting the dictionaries
 
 	print('On the alignment file, the residues aligned to this index are:')
 	for i in frequencies:
-		print(' ++ %.4f%% %s' % (float(frequencies[i]/size * 100), i))
-
+		print(' ++ %.4f%% %s' % ((float(i[1])/size) * 100, i[0]))
 
 def calculate_residue_frequency(reference_sequence, index, storage):
 	## return a dictionary with key = residue and value = frequency (ordered)
