@@ -19,7 +19,7 @@ def storage_setup():
 	for i in fasta_sequences:
 		hold = i.split('\n',1)
 		seqname = hold[0]
-		sequence = hold[1].replace("\n", "")
+		sequence = hold[1].replace('\n', '').replace('\r', '') # mysterious carriage returns
 		
 		code_valid = False
 		crds = []

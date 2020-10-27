@@ -16,7 +16,8 @@ def storage_setup():
 	for i in fasta_sequences:
 		hold = i.split('\n',1)
 		seqname = hold[0]
-		sequence = hold[1].replace("\n", "")
+		sequence = hold[1].replace('\n', '').replace('\r', '') # mysterious carriage returns
+		#print(sequence)
 		
 		code_valid = False
 		crds = []
@@ -40,8 +41,8 @@ def storage_setup():
 	# calculating frequency of residue at particular position
 	## INPUTS HERE
 	number_of_seqs = len(seq_storage)
-	index = 115
-	reference_sequence = 'HOR131' # use this as a reference sequence
+	index = 118
+	reference_sequence = 'hOR1G1' # use this as a reference sequence
 	reference_sequence = reference_sequence.upper()
 
 	frequencies = calculate_residue_frequency(reference_sequence, index, seq_storage)
@@ -59,21 +60,20 @@ def calculate_residue_frequency(reference_sequence, index, storage):
 
 	# imported function that gets the closest string matches and returns as list length n
 	match = get_close_matches(reference_sequence, set_of_keys, 1)[0]
-	print(match)
+	#print(match)
 
 	original_index = index
 	i = 0
-	gaps = 0
 	while True:
 		if storage[match][1][i] != '-':
 			i += 1
-		else:
-			gaps += 1
+		elif storage[match][1][i] == '-':
 			i += 1
 			index += 1
 		if i == index:
-			save_char = storage[match][1][i-1]
+			save_char = storage[match][1][index-1]
 			break
+
 		
 	print('On the reference sequence %s, index %d is %s \n' 
 		% (match, original_index, save_char))
