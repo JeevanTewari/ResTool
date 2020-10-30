@@ -1,5 +1,6 @@
 ## compared to V1, this tool takes in input from the console (run with python ResToolV2.py)
 ## refined to take in motifs like so ('118-120') for MAY motif and returns top 10 frequencies
+## compared to V2 now outputs associated residues with each motif -- stored in identification dict
 
 import re
 from difflib import get_close_matches
@@ -56,18 +57,14 @@ def storage_setup():
 		motif = True
 	#reference_sequence = 'hOR13G1' # use this as a reference sequence
 
-	frequencies = calculate_residue_frequency(reference_sequence, index, seq_storage, motif)
+	(frequencies, identifications) = calculate_residue_frequency(reference_sequence, index, seq_storage, motif)
 	frequencies = {k: v for k, v in sorted(frequencies.items(), key=lambda item: item[1],
 		reverse=True)} # sorting the dictionaries
 
 	print('On the alignment file, the residues aligned to this index are:')
 	limit = 1
 	for i in frequencies:
-		print(' ++ %.4f%% %s' % (float(frequencies[i]/size * 100), i))
-		if limit < 10:
-			limit += 1
-		else:
-			break
+		print(' ++ %.4f%% %s --- %s' % (float(frequencies[i]/size * 100), i, identifications[i][0:7]))
 		
 		
 
@@ -121,7 +118,12 @@ def calculate_residue_frequency(reference_sequence, index, storage, motif):
 		else:
 			frequencies[residue] = 1
 
-	return frequencies
+		if residue in list(identifications.keys()): # for every unique motif/residue at index i in the alignment create a key for it
+			identifications[residue].append(i)
+		else:
+			identifications[residue] = [i]
+
+	return (frequencies, identifications)
 
 def main():
     storage_setup()
