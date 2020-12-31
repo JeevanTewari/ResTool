@@ -148,3 +148,7 @@ if __name__ == "__main__":
 ## return name of OR that corresponds to the position and particular residues
 
 ## investigate CW
+
+## meeting with Kevin and Claire -- huge alignment with many species
+## see evolution of motifs -> conserved motifs
+## CWL vs FYG --> Find if a species possess a CYL
