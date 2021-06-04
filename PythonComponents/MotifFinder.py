@@ -17,7 +17,7 @@ def storage_setup(arguments = None, command_line_input = False):
 	print("Species: %s\tReference Sequence: %s\tIndices: %s"
 	 % (species, ref_seq, indices))
 
-	with open ('LargeAli.fa', 'r') as f:
+	with open ('GPCRali.fa', 'r') as f:
 		file_contents = f.read()
 
 	fasta_sequences = file_contents.split(">")
@@ -89,21 +89,21 @@ def storage_setup(arguments = None, command_line_input = False):
 		else:
 			limit -= 1
 
-
 	print('\n')
-	for x in positions:
-		temp_dict = positions[x]
-		temp_dict = {k: v for k, v in sorted(temp_dict.items(), key=lambda item: item[1],
-		reverse=True)}
+	if motif:
+		for x in positions:
+			temp_dict = positions[x]
+			temp_dict = {k: v for k, v in sorted(temp_dict.items(), key=lambda item: item[1],
+			reverse=True)}
 
-		total = 0
-		for i in temp_dict:
-			total = total + temp_dict[i]
-		tup_list  = []
-		for i in temp_dict:
-			tup_list.append(i + "=" + str(100*round(float(temp_dict[i]/total),3)))
-		print('position' ,index[0]+x, tup_list)
-		outputData.append([index[0]+x, tup_list])
+			total = 0
+			for i in temp_dict:
+				total = total + temp_dict[i]
+			tup_list  = []
+			for i in temp_dict:
+				tup_list.append(i + "=" + str(100*round(float(temp_dict[i]/total),3)))
+			print('position' ,index[0]+x, tup_list)
+			outputData.append([index[0]+x, tup_list])
  
 	print('\n')
 	writeCSV(outputData)
@@ -136,9 +136,15 @@ def calculate_residue_frequency(reference_sequence, index, storage, motif):
 			else:
 				save_char = storage[match][1][i-1]
 			break
-		
-	print('\nOn the reference sequence %s, index %d-%d is %s \n' 
-		% (match, original_index, original_index+length, save_char))
+
+	if motif:	
+		print('\nOn the reference sequence %s, index %d-%d is %s \n' 
+			% (match, original_index, original_index+length, save_char))
+	else:
+		print('\nOn the reference sequence %s, index %d-%d is %s \n' 
+			% (match, original_index, original_index, save_char))
+		length = 0
+
 
 	## Now calculating the frequency of each residue at that position
 	## 
